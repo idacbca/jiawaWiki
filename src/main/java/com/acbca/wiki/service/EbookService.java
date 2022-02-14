@@ -3,8 +3,9 @@ package com.acbca.wiki.service;
 import com.acbca.wiki.domain.Ebook;
 import com.acbca.wiki.domain.EbookExample;
 import com.acbca.wiki.mapper.EbookMapper;
-import com.acbca.wiki.req.EbookReq;
-import com.acbca.wiki.resp.EbookResp;
+import com.acbca.wiki.req.EbookQueryReq;
+import com.acbca.wiki.req.EbookSaveReq;
+import com.acbca.wiki.resp.EbookQueryResp;
 import com.acbca.wiki.resp.PageResp;
 import com.acbca.wiki.util.CopyUtil;
 import com.github.pagehelper.PageHelper;
@@ -25,7 +26,7 @@ public class EbookService {
     @Resource
     private EbookMapper ebookMapper;
 
-    public PageResp<EbookResp> list(EbookReq req) {
+    public PageResp<EbookQueryResp> list(EbookQueryReq req) {
         EbookExample ebookExample = new EbookExample();
         EbookExample.Criteria criteria = ebookExample.createCriteria();
         if (!ObjectUtils.isEmpty(req.getName())) {
@@ -46,12 +47,26 @@ public class EbookService {
 //            respList.add(ebookResp);
 //        }
 
-        List<EbookResp> respList = CopyUtil.copyList(ebookList, EbookResp.class);
+        List<EbookQueryResp> respList = CopyUtil.copyList(ebookList, EbookQueryResp.class);
 
-        PageResp<EbookResp> pageResp = new PageResp<>();
+        PageResp<EbookQueryResp> pageResp = new PageResp<>();
         pageResp.setTotal(pageInfo.getTotal());
         pageResp.setList(respList);
 
         return pageResp;
+    }
+
+    /**
+     * 保存
+     */
+    public void save(EbookSaveReq req) {
+        Ebook ebook = CopyUtil.copy(req, Ebook.class);
+        if (ObjectUtils.isEmpty(req.getId())) {
+            // 新增
+            ebookMapper.insert(ebook);
+        } else {
+            // 更新
+            ebookMapper.updateByPrimaryKey(ebook);
+        }
     }
 }

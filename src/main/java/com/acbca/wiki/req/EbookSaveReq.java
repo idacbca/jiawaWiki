@@ -1,6 +1,6 @@
-package com.acbca.wiki.resp;
+package com.acbca.wiki.req;
 
-public class EbookResp {
+public class EbookSaveReq {
     private Long id;
 
     private String name;
