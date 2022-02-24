@@ -1,10 +1,12 @@
 package com.acbca.wiki.controller;
 
+import com.acbca.wiki.req.UserLoginReq;
 import com.acbca.wiki.req.UserQueryReq;
 import com.acbca.wiki.req.UserResetPasswordReq;
 import com.acbca.wiki.req.UserSaveReq;
 import com.acbca.wiki.resp.CommonResp;
 import com.acbca.wiki.resp.PageResp;
+import com.acbca.wiki.resp.UserLoginResp;
 import com.acbca.wiki.resp.UserQueryResp;
 import com.acbca.wiki.service.UserService;
 import org.springframework.util.DigestUtils;
@@ -48,6 +50,15 @@ public class UserController {
         req.setPassword(DigestUtils.md5DigestAsHex(req.getPassword().getBytes()));
         CommonResp resp = new CommonResp<>();
         userService.resetPassword(req);
+        return resp;
+    }
+
+    @PostMapping("/login")
+    public CommonResp login(@Valid @RequestBody UserLoginReq req){
+        req.setPassword(DigestUtils.md5DigestAsHex(req.getPassword().getBytes()));
+        CommonResp<UserLoginResp> resp = new CommonResp<>();
+        UserLoginResp userLoginResp = userService.login(req);
+        resp.setContent(userLoginResp);
         return resp;
     }
 }
