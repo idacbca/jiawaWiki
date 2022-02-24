@@ -6,6 +6,7 @@ import com.acbca.wiki.exception.BusinessException;
 import com.acbca.wiki.exception.BusinessExceptionCode;
 import com.acbca.wiki.mapper.UserMapper;
 import com.acbca.wiki.req.UserQueryReq;
+import com.acbca.wiki.req.UserResetPasswordReq;
 import com.acbca.wiki.req.UserSaveReq;
 import com.acbca.wiki.resp.PageResp;
 import com.acbca.wiki.resp.UserQueryResp;
@@ -103,5 +104,13 @@ public class UserService {
         } else {
             return userList.get(0);
         }
+    }
+
+    /**
+     * 修改密码
+     */
+    public void resetPassword(UserResetPasswordReq req) {
+        User user = CopyUtil.copy(req, User.class);
+        userMapper.updateByPrimaryKeySelective(user);
     }
 }
